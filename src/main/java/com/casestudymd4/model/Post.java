@@ -1,6 +1,7 @@
 package com.casestudymd4.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,24 +10,33 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String image;
     private String content;
     private String privacy;
     private Date timePost;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post", fetch = FetchType.EAGER)
+    private List<Image> images = new ArrayList<>();
+
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "post", fetch = FetchType.EAGER)
+    private List<AccountLike> likeList = new ArrayList<>();
+
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "post", fetch = FetchType.EAGER)
+    private List<Comment> commentList = new ArrayList<>();
     @ManyToOne
     private Account account;
 
     public Post() {
     }
 
-    public Post(Long id, String image, String content,
-                String privacy, Date timePost, Account account) {
+    public Post(Long id, String content, String privacy, Date timePost, List<Image> images,
+                List<AccountLike> likeList, List<Comment> commentList, Account account) {
         this.id = id;
-        this.image = image;
         this.content = content;
         this.privacy = privacy;
         this.timePost = timePost;
+        this.images = images;
+        this.likeList = likeList;
+        this.commentList = commentList;
         this.account = account;
     }
 
@@ -36,14 +46,6 @@ public class Post {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public String getContent() {
@@ -68,6 +70,30 @@ public class Post {
 
     public void setTimePost(Date timePost) {
         this.timePost = timePost;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<AccountLike> getLikeList() {
+        return likeList;
+    }
+
+    public void setLikeList(List<AccountLike> likeList) {
+        this.likeList = likeList;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
     public Account getAccount() {
